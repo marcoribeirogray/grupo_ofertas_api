@@ -1,0 +1,24 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<section class="cards">
+    <article>
+        <h2>Templates</h2>
+        <p>{{ template_count }} cadastrados</p>
+        <a class="btn" href="/templates">Gerenciar</a>
+    </article>
+    <article>
+        <h2>Regras</h2>
+        <p>{{ rule_count }} ativas</p>
+        <a class="btn" href="/rules">Criar regras</a>
+    </article>
+    <article>
+        <h2>Integrações</h2>
+        <p>{{ integration_count }} configuradas</p>
+        <a class="btn" href="/integrations">Configurar</a>
+    </article>
+</section>
+<section>
+    <h2>Bem-vindo</h2>
+    <p>Use os menus acima para configurar integrações afiliadas, personalizar templates e gerar anúncios prontos para publicação em qualquer canal.</p>
+</section>
+{% endblock %}

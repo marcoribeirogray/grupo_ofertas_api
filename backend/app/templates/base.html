@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <title>{{ title or 'Grupo Ofertas API' }}</title>
+    <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="container topbar__content">
+            <h1>Grupo Ofertas API</h1>
+            <nav class="topbar__nav">
+                <a href="/">Dashboard</a>
+                <a href="/integrations">Integrações</a>
+                <a href="/templates">Templates</a>
+                <a href="/offers">Gerar Oferta</a>
+                {% if user %}
+                    <a href="/rules">Regras</a>
+                {% endif %}
+            </nav>
+            <div class="topbar__session">
+                {% if user %}
+                    <span class="user-pill">{{ user.full_name or user.email }}</span>
+                    <a class="btn-small" href="/auth/logout">Sair</a>
+                {% else %}
+                    <a class="btn-small" href="/auth/login">Entrar</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="footer">
+        <div class="container">Configuração de anúncios afiliados • 2025</div>
+    </footer>
+</body>
+</html>
+

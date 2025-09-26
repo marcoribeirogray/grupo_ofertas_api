@@ -1,0 +1,77 @@
+﻿{% extends \"base.html\" %}
+{% block content %}
+<h2>Regras dinâmicas</h2>
+{% if message %}
+<p class=\"notice\">{{ message }}</p>
+{% endif %}
+{% if error %}
+<p class=\"notice notice--error\">{{ error }}</p>
+{% endif %}
+
+{% if can_manage %}
+<section class=\"card\">
+    <h3>Criar nova regra</h3>
+    <form method=\"post\" action=\"/rules\" class=\"stack\">
+        <label>Nome
+            <input type=\"text\" name=\"name\" value=\"{{ form_data.name or '' }}\" required />
+        </label>
+        <label>Descrição
+            <input type=\"text\" name=\"description\" value=\"{{ form_data.description or '' }}\" />
+        </label>
+        <label>Condições (JSON)
+            <textarea name=\"conditions_json\" rows=\"6\">{{ form_data.conditions_json or '{}' }}</textarea>
+        </label>
+        <label>Ações (JSON)
+            <textarea name=\"actions_json\" rows=\"6\">{{ form_data.actions_json or '{}' }}</textarea>
+        </label>
+        <button type=\"submit\" class=\"btn\">Salvar regra</button>
+    </form>
+</section>
+{% endif %}
+
+<section class=\"grid\">
+    {% for item in rules %}
+    {% set rule = item.entity %}
+    <article class=\"card\">
+        <header class=\"card__header\">
+            <div>
+                <h3>{{ rule.name }}</h3>
+                {% if rule.description %}<p class=\"muted\">{{ rule.description }}</p>{% endif %}
+            </div>
+            <span class=\"badge\">ID {{ rule.id }}</span>
+        </header>
+        {% if can_manage %}
+        <form method=\"post\" action=\"/rules/{{ rule.id }}/update\" class=\"stack\">
+            <label>Nome
+                <input type=\"text\" name=\"name\" value=\"{{ rule.name }}\" required />
+            </label>
+            <label>Descrição
+                <input type=\"text\" name=\"description\" value=\"{{ rule.description or '' }}\" />
+            </label>
+            <label>Condições (JSON)
+                <textarea name=\"conditions_json\" rows=\"6\">{{ item.conditions_json }}</textarea>
+            </label>
+            <label>Ações (JSON)
+                <textarea name=\"actions_json\" rows=\"6\">{{ item.actions_json }}</textarea>
+            </label>
+            <button type=\"submit\" class=\"btn\">Atualizar</button>
+        </form>
+        <form method=\"post\" action=\"/rules/{{ rule.id }}/delete\" onsubmit=\"return confirm('Remover a regra {{ rule.name }}?');\">
+            <button type=\"submit\" class=\"btn-outline\">Remover</button>
+        </form>
+        {% else %}
+        <div class=\"stack\">
+            <label>Condições
+                <pre class=\"code\">{{ item.conditions_json }}</pre>
+            </label>
+            <label>Ações
+                <pre class=\"code\">{{ item.actions_json }}</pre>
+            </label>
+        </div>
+        {% endif %}
+    </article>
+    {% else %}
+    <p>Nenhuma regra cadastrada.</p>
+    {% endfor %}
+</section>
+{% endblock %}

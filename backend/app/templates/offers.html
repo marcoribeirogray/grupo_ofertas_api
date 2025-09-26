@@ -1,0 +1,47 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<h2>Gerador de ofertas</h2>
+<section class="card">
+    <form method="post" action="/offers">
+        <label>URL do produto
+            <input type="url" name="url" placeholder="https://..." required />
+        </label>
+        <label>Loja (opcional)
+            <select name="store">
+                <option value="">Detectar automaticamente</option>
+                <option value="amazon">Amazon</option>
+                <option value="mercadolivre">Mercado Livre</option>
+                <option value="awin">AWIN</option>
+            </select>
+        </label>
+        <label>Cupom (opcional)
+            <input type="text" name="coupon" placeholder="OFERTA10" />
+        </label>
+        <label>Template
+            <select name="template_slug">
+                <option value="">Usar padrão</option>
+                {% for template in templates %}
+                    <option value="{{ template.slug }}">{{ template.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <details>
+            <summary>Personalizações rápidas</summary>
+            <label>Headline
+                <input type="text" name="headline_override" placeholder="Headline customizada" />
+            </label>
+            <label>Emoji
+                <input type="text" name="emoji_override" placeholder="🔥" />
+            </label>
+        </details>
+        <button type="submit" class="btn">Gerar prévia</button>
+    </form>
+</section>
+{% if preview %}
+<section class="card">
+    <h3>Prévia</h3>
+    <pre class="code">{{ preview.text }}</pre>
+    <p><strong>Link afiliado:</strong> <a href="{{ preview.affiliate_url }}" target="_blank">{{ preview.affiliate_url }}</a></p>
+</section>
+{% endif %}
+{% endblock %}

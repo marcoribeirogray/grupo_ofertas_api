@@ -1,0 +1,43 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<h2>Templates de anúncio</h2>
+{% if message %}
+<p class="notice">{{ message }}</p>
+{% endif %}
+<section class="grid">
+    {% for template in templates %}
+    <article class="card">
+        <header>
+            <h3>{{ template.name }}</h3>
+            {% if template.is_default %}<span class="badge">Padrão</span>{% endif %}
+        </header>
+        <pre class="code">{{ template.body }}</pre>
+        <form method="post" action="/templates/{{ template.id }}/delete" onsubmit="return confirm('Remover template {{ template.name }}?');">
+            <button type="submit" class="btn-outline">Remover</button>
+        </form>
+    </article>
+    {% endfor %}
+</section>
+<section class="card">
+    <h3>Criar template</h3>
+    <form method="post" action="/templates">
+        <label>Nome
+            <input type="text" name="name" required />
+        </label>
+        <label>Slug
+            <input type="text" name="slug" required />
+        </label>
+        <label>Descrição
+            <input type="text" name="description" />
+        </label>
+        <label>Corpo (Jinja)
+            <textarea name="body" rows="8" placeholder="Use variáveis como {{ '{{ title }}' }} e {{ '{{ price }}' }}" required></textarea>
+        </label>
+        <label class="checkbox">
+            <input type="checkbox" name="is_default" />
+            Marcar como padrão
+        </label>
+        <button type="submit" class="btn">Salvar template</button>
+    </form>
+</section>
+{% endblock %}

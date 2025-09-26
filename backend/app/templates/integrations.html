@@ -1,0 +1,43 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<h2>Integrações afiliadas</h2>
+{% if message %}
+<p class="notice">{{ message }}</p>
+{% endif %}
+<div class="grid">
+{% for integration in integrations %}
+    <form class="card" method="post" action="/integrations/{{ integration.provider }}">
+        <h3>{{ integration.label }} ({{ integration.provider }})</h3>
+        <label>Nome exibido
+            <input type="text" name="label" value="{{ integration.label }}" />
+        </label>
+        {% if integration.provider == 'amazon' %}
+            <label>Tag padrão
+                <input type="text" name="tag" value="{{ integration.data.get('tag','') }}" placeholder="ex: meustore-20" />
+            </label>
+        {% elif integration.provider == 'mercadolivre' %}
+            <label>ID da campanha
+                <input type="text" name="campaign_id" value="{{ integration.data.get('campaign_id','') }}" placeholder="ex: PDI123" />
+            </label>
+            <label>ID do seller (opcional)
+                <input type="text" name="seller_id" value="{{ integration.data.get('seller_id','') }}" />
+            </label>
+        {% elif integration.provider == 'awin' %}
+            <label>Prefixo de deep link
+                <input type="text" name="deeplink_prefix" value="{{ integration.data.get('deeplink_prefix','') }}" placeholder="https://www.awin1.com/cread.php?...&ued=" />
+            </label>
+            <label>Source ID
+                <input type="text" name="source_id" value="{{ integration.data.get('source_id','') }}" />
+            </label>
+        {% else %}
+            {% for key, value in integration.data.items() %}
+            <label>{{ key }}
+                <input type="text" name="{{ key }}" value="{{ value }}" />
+            </label>
+            {% endfor %}
+        {% endif %}
+        <button type="submit" class="btn">Salvar</button>
+    </form>
+{% endfor %}
+</div>
+{% endblock %}
